@@ -4,349 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arc Explained: The Definitive Learning Experience</title>
-    <!-- Library for generating the dynamic share image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        :root {
-            --primary-bg: #0a0f2c;
-            --secondary-bg: #101842;
-            --card-bg: #1a2357;
-            --text-primary: #ffffff;
-            --text-secondary: #c0c8ff;
-            --accent-primary: #00e0b0;
-            --accent-secondary: #4d8aff;
-            --accent-success: #00e0b0;
-            --accent-error: #ff4d6d; 
-            --border-color: #35418b;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 10% 20%, rgba(77, 138, 255, 0.1), transparent 35%),
-                              radial-gradient(circle at 90% 80%, rgba(0, 224, 176, 0.1), transparent 35%);
-            background-attachment: fixed;
-        }
-
-        .container { max-width: 1024px; margin: 0 auto; padding: 60px 20px; }
-        
-        /* Updated Header for a cleaner look */
-        header {
-            display: flex;
-            justify-content: flex-start; /* Align logo to the left */
-            align-items: center;
-            padding: 20px 40px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            background: rgba(10, 15, 44, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 700; }
-        .logo span { color: var(--accent-primary); }
-        
-        /* Removed .nav styles as it's no longer needed */
-
-        .page { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 80px; opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s forwards; position: relative; }
-        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
-        /* All other styles remain identical to the previous correct version */
-        .main-title { font-size: 4.5rem; font-weight: 700; margin-bottom: 20px; line-height: 1.1; text-align: center; background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { font-size: 1.25rem; color: var(--text-secondary); max-width: 650px; margin: 0 auto 40px; text-align: center; }
-        .btn { display: inline-block; padding: 14px 32px; font-size: 1rem; font-weight: 600; text-decoration: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.3s; border: none; }
-        .btn-primary { background-color: var(--accent-primary); color: var(--primary-bg); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 224, 176, 0.2); }
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-title { font-size: 2.8rem; margin-bottom: 15px; color: var(--text-primary); }
-        .section-subtitle { font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
-        .learning-journey { position: fixed; top: 50%; left: 30px; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 999; }
-        .journey-item { position: relative; cursor: pointer; }
-        .journey-item .icon-bg { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border-color); background-color: var(--secondary-bg); transition: all 0.4s ease; }
-        .journey-item svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; color: var(--text-secondary); transition: all 0.4s ease; }
-        .journey-item .journey-tooltip { position: absolute; left: 55px; top: 50%; transform: translateY(-50%); background-color: var(--card-bg); color: var(--text-primary); padding: 5px 12px; border-radius: 6px; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; font-size: 0.9rem; }
-        .journey-item:hover .journey-tooltip { opacity: 1; visibility: visible; }
-        .journey-item.active .icon-bg { border-color: var(--accent-primary); background-color: var(--accent-primary); }
-        .journey-item.active svg { color: var(--primary-bg); transform: translate(-50%, -50%) scale(1.1); }
-        .animate-on-scroll { transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-        .fade-up { opacity: 0; transform: translateY(40px); }
-        .slide-in-left { opacity: 0; transform: translateX(-40px); }
-        .slide-in-right { opacity: 0; transform: translateX(40px); }
-        .animate-on-scroll.visible { opacity: 1; transform: none; }
-        .scroll-down-arrow { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); cursor: pointer; color: var(--accent-primary); animation: bounce 2.2s infinite ease-in-out; opacity: 0; transition: opacity 0.5s ease-in-out; }
-        .scroll-down-arrow.visible { opacity: 1; }
-        .scroll-down-arrow svg { width: 32px; height: 32px; transition: transform 0.3s ease-in-out; }
-        .scroll-down-arrow:hover svg { transform: scale(1.1); animation-play-state: paused; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-20px); } 60% { transform: translateX(-50%) translateY(-10px); } }
-        .highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .highlight-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 12px; text-align: center; }
-        .highlight-value { font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 10px; }
-        .highlight-label { font-size: 1rem; color: var(--text-secondary); }
-        .problem-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
-        .tab-btn { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s; }
-        .tab-btn.active, .tab-btn:hover { color: var(--text-primary); background-color: var(--secondary-bg); border-color: var(--accent-secondary); }
-        .problem-content { display: none; }
-        .problem-content.active { display: block; }
-        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
-        .comparison-col h3 { font-size: 1.5rem; margin-bottom: 20px; color: var(--accent-error); }
-        .comparison-col:last-child h3 { color: var(--accent-success); }
-        .problem-item { background: var(--card-bg); padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent-error); }
-        .solution-item { background: var(--card-bg); padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent-success); }
-        .problem-item h4, .solution-item h4 { margin-bottom: 8px; }
-        .problem-item p, .solution-item p { color: var(--text-secondary); font-size: 0.9rem; }
-        .demo-box.private { border-color: var(--accent-error); }
-        .demo-box.public { border-color: var(--accent-success); }
-        .demo-box.private h4 { color: var(--accent-error); }
-        .demo-box.public h4 { color: var(--accent-success); }
-        .auditor { border-color: var(--accent-secondary); }
-        .auditor h4 { color: var(--accent-secondary); }
-        .quiz-option.correct { border-color: var(--accent-success); background-color: rgba(0, 224, 176, 0.2); }
-        .quiz-option.incorrect { border-color: var(--accent-error); background-color: rgba(255, 77, 109, 0.2); }
-        .quiz-feedback.correct { background: rgba(0, 224, 176, 0.1); color: var(--accent-success); }
-        .quiz-feedback.incorrect { background: rgba(255, 77, 109, 0.1); color: var(--accent-error); }
-        .accordion { display: flex; flex-direction: column; gap: 20px; }
-        .accordion-item { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
-        .accordion-header { padding: 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .accordion-header h3 { font-size: 1.4rem; color: var(--text-primary); }
-        .accordion-icon { transition: transform 0.4s; font-size: 2rem; color: var(--accent-secondary); }
-        .accordion-item.active .accordion-icon { transform: rotate(45deg); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
-        .accordion-content-inner { padding: 0 25px 25px; border-top: 1px solid var(--border-color); color: var(--text-secondary); }
-        .accordion-content-inner ul { list-style-position: inside; padding-left: 10px; }
-        .accordion-content-inner li { margin-bottom: 10px; }
-        .flip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; perspective: 1000px; }
-        .flip-card { background-color: transparent; height: 300px; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
-        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; }
-        .flip-card-back { transform: rotateY(180deg); }
-        .flip-card-front h3 { font-size: 1.5rem; color: var(--accent-primary); margin-top: 15px; }
-        .flip-card-back p { font-size: 0.9rem; color: var(--text-secondary); }
-        .demo-wrapper { display: flex; flex-direction: column; gap: 30px; }
-        .demo-container { width: 100%; background: var(--secondary-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .demo-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
-        .demo-timeline-controls { display: flex; gap: 10px; }
-        .demo-control-btn { background: var(--card-bg); color: var(--text-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; }
-        .demo-control-btn:hover { background-color: var(--secondary-bg); border-color: var(--accent-secondary); }
-        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #35418b; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent-primary); }
-        input:checked + .slider:before { transform: translateX(24px); }
-        .toggle-label { display: flex; align-items: center; gap: 10px; font-weight: 500; color: var(--text-secondary); }
-        .demo-timeline { display: flex; justify-content: space-between; position: relative; margin-bottom: 25px; }
-        .timeline-bar { position: absolute; height: 3px; background: var(--border-color); top: 50%; transform: translateY(-50%); width: 100%; }
-        .timeline-progress { position: absolute; height: 3px; background: var(--accent-primary); top: 50%; transform: translateY(-50%); width: 0%; transition: width 0.5s ease-in-out; }
-        .timeline-step { z-index: 1; text-align: center; cursor: pointer; flex-basis: 0; flex-grow: 1; }
-        .timeline-dot { width: 20px; height: 20px; background: var(--card-bg); border: 3px solid var(--border-color); border-radius: 50%; margin: 0 auto 8px; transition: all 0.4s; }
-        .timeline-step.active .timeline-dot { background: var(--accent-primary); border-color: var(--accent-primary); transform: scale(1.2); }
-        .timeline-label { font-size: 0.8rem; color: var(--text-secondary); }
-        .timeline-step.active .timeline-label { color: var(--text-primary); font-weight: 600; }
-        .demo-content { width: 100%; position: relative; min-height: 250px; }
-        .demo-step { position: absolute; width: 100%; opacity: 0; visibility: hidden; transition: opacity 0.5s, transform 0.5s; transform: translateY(10px); }
-        .demo-step.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .demo-box-container { display: flex; justify-content: space-around; align-items: flex-start; gap: 20px; margin-top: 20px; }
-        .demo-box { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px; width: 48%; }
-        .demo-box h4 { font-size: 1rem; margin-bottom: 10px; color: var(--text-primary); padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        .demo-box-content { font-family: 'SF Mono', 'Courier New', monospace; font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap; line-height: 1.8; }
-        .demo-step > p { font-size: 1rem; color: var(--text-secondary); margin-bottom: 20px; text-align: center; }
-        .blur { background: var(--border-color); color: transparent; border-radius: 4px; padding: 0 4px; user-select: none; display: inline-block; transition: all 0.3s; }
-        .quiz-container { width: 100%; max-width: 700px; background: var(--secondary-bg); padding: 40px; border-radius: 16px; border: 1px solid var(--border-color); text-align: left; }
-        .quiz-question { font-size: 1.25rem; font-weight: 600; margin-bottom: 25px; }
-        .quiz-options { display: flex; flex-direction: column; gap: 15px; }
-        .quiz-option { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-        .quiz-option:hover { border-color: var(--accent-secondary); background-color: rgba(77, 138, 255, 0.1); }
-        .quiz-feedback { margin-top: 20px; padding: 15px; border-radius: 8px; font-size: 0.9rem; display: none; }
-        .quiz-controls { margin-top: 30px; text-align: right; }
-        .quiz-result { text-align: center; }
-        .trophy { font-size: 5rem; margin-bottom: 20px; }
-        .share-container { margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px; text-align: center; }
-        .share-container h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--text-secondary); }
-        .share-preview { margin-bottom: 20px; }
-        .share-preview img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border-color); }
-        .share-buttons { display: flex; justify-content: center; gap: 15px; }
-        .btn-twitter { background-color: #1DA1F2; color: white; }
-        .btn-download { background-color: var(--secondary-bg); color: var(--text-primary); border: 1px solid var(--border-color); }
-        #quiz-result-card { position: absolute; left: -9999px; top: auto; width: 600px; padding: 40px; background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg)); color: var(--text-primary); font-family: 'Inter', sans-serif; border-radius: 16px; border: 1px solid var(--border-color); }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="logo">Arc<span>.</span>Explained</div>
-    </header>
-
+    <header><div class="logo">Arc<span>.</span>Explained</div></header>
     <div class="learning-journey">
-        <a href="#intro" class="journey-item" data-section="intro" title="Introduction"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span class="journey-tooltip">Introduction</span></a>
-        <a href="#problem" class="journey-item" data-section="problem" title="The Problem"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span class="journey-tooltip">The Problem</span></a>
-        <a href="#architecture" class="journey-item" data-section="architecture" title="Architecture"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.79V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z"></path><polyline points="2.32 6.16 12 11 21.68 6.16"></polyline><line x1="12" y1="22.76" x2="12" y2="11"></line></svg><span class="journey-tooltip">Architecture</span></a>
-        <a href="#use-cases" class="journey-item" data-section="use-cases" title="Use Cases"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg><span class="journey-tooltip">Use Cases</span></a>
-        <a href="#demo" class="journey-item" data-section="demo" title="Interactive Demo"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span class="journey-tooltip">Demo</span></a>
-        <a href="#quiz" class="journey-item" data-section="quiz" title="Quiz"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span class="journey-tooltip">Quiz</span></a>
+        <a href="#intro" class="journey-item" data-section="intro" title="Introduction"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span class="journey-tooltip">Introduction</span></a>
+        <a href="#problem" class="journey-item" data-section="problem" title="The Problem"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span class="journey-tooltip">The Problem</span></a>
+        <a href="#architecture" class="journey-item" data-section="architecture" title="Architecture"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.79V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z"></path><polyline points="2.32 6.16 12 11 21.68 6.16"></polyline><line x1="12" y1="22.76" x2="12" y2="11"></line></svg><span class="journey-tooltip">Architecture</span></a>
+        <a href="#use-cases" class="journey-item" data-section="use-cases" title="Use Cases"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg><span class="journey-tooltip">Use Cases</span></a>
+        <a href="#roadmap" class="journey-item" data-section="roadmap" title="Roadmap"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg><span class="journey-tooltip">Roadmap</span></a>
+        <a href="#demo" class="journey-item" data-section="demo" title="Interactive Demo"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span class="journey-tooltip">Demo</span></a>
+        <a href="#quiz" class="journey-item" data-section="quiz" title="Quiz"><div class="icon-bg"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span class="journey-tooltip">Quiz</span></a>
     </div>
-
     <main>
-        <!-- HTML for all sections is identical to previous version -->
-        <section id="intro" class="page"><div class="container"><h1 class="main-title">A New Foundation for Finance</h1><p class="subtitle">Arc is a Layer-1 blockchain purpose-built to solve the core challenges of institutional finance, creating a global, regulated, and efficient settlement layer for the internet economy.</p><div style="text-align: center; margin-bottom: 80px;"><a href="#problem" class="btn btn-primary" id="start-learning-btn">Start Learning</a></div><div class="highlights-grid"><div class="highlight-card"><div class="highlight-value" data-target="1">&lt;1s</div><div class="highlight-label">Settlement Finality</div></div><div class="highlight-card"><div class="highlight-value" data-target="10000">0+</div><div class="highlight-label">Transactions per Second</div></div><div class="highlight-card"><div class="highlight-value">USDC</div><div class="highlight-label">Native Gas Token</div></div></div><a href="#problem" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
+        <section id="intro" class="page"><div class="container"><h1 class="main-title">A New Foundation for Finance</h1><p class="subtitle">Arc is a Layer-1 blockchain purpose-built to solve the core challenges of institutional finance, creating a global, regulated, and efficient settlement layer for the internet economy.</p><div style="text-align: center; margin-bottom: 80px;"><a href="#problem" class="btn btn-primary" id="start-learning-btn">Start Learning</a></div><div class="highlights-grid">
+            <div class="highlight-card animate-on-scroll fade-up">
+                <div class="highlight-value" data-target="1"><span>&lt;1s</span></div> 
+                <div class="highlight-label">Settlement Finality</div>
+            </div>
+            <div class="highlight-card animate-on-scroll fade-up" style="transition-delay: 0.1s;">
+                <div class="highlight-value" data-target="10000"><span>0</span>+ <div class="info-tooltip-container"><div class="info-icon">i</div><div class="info-tooltip">Achieved with 4 validators in consensus level benchmarks. A 20 validator setup achieves ~3,000 TPS.</div></div></div>
+                <div class="highlight-label">Transactions per Second</div>
+            </div>
+            <div class="highlight-card animate-on-scroll fade-up" style="transition-delay: 0.2s;">
+                <div class="highlight-value"><span>USDC</span></div> 
+                <div class="highlight-label">Native Gas Token</div>
+            </div>
+        </div><a href="#problem" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
         <section id="problem" class="page"><div class="container"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">Bridging Two Worlds</h2><p class="section-subtitle">Arc is engineered to be the synthesis of the new and the established, combining the efficiency of blockchain with the stability and compliance of regulated finance.</p></div><div class="problem-tabs animate-on-scroll fade-up"><button class="tab-btn active" data-target="legacy">Legacy Finance</button><button class="tab-btn" data-target="blockchain">Blockchain Limits</button></div><div id="legacy" class="problem-content active"><div class="comparison-grid"><div class="comparison-col animate-on-scroll slide-in-left"><h3>The Challenge</h3><div class="problem-item"><h4>Slow, Opaque Payments</h4><p>Cross-border transactions take days to clear through a complex web of intermediaries, creating delays and counterparty risk.</p></div><div class="problem-item"><h4>Fragmented Markets</h4><p>Assets are siloed in different jurisdictions with incompatible rails, burdened by manual processes and layers of middlemen.</p></div></div><div class="comparison-col animate-on-scroll slide-in-right"><h3>The Arc Solution</h3><div class="solution-item"><h4>Instant, Global Settlement</h4><p>Arc provides sub-second, final settlement 24/7, enabling programmable, real-time capital mobility anywhere in the world.</p></div><div class="solution-item"><h4>Unified, Tokenized Markets</h4><p>By supporting tokenized RWAs, Arc creates a single, global venue for asset issuance, trading, and settlement with automated, on-chain logic.</p></div></div></div></div><div id="blockchain" class="problem-content"><div class="comparison-grid"><div class="comparison-col"><h3 class="animate-on-scroll slide-in-left">The Challenge</h3><div class="problem-item animate-on-scroll slide-in-left"><h4>Volatile Gas Fees</h4><p>Using speculative tokens for gas creates unpredictable operational costs and accounting nightmares for businesses.</p></div><div class="problem-item animate-on-scroll slide-in-left"><h4>Probabilistic Finality</h4><p>Risk of chain "reorgs" means high-value transactions aren't truly final for minutes or hours, introducing unacceptable settlement risk.</p></div><div class="problem-item animate-on-scroll slide-in-left"><h4>Lack of Compliant Privacy</h4><p>Fully transparent ledgers expose sensitive commercial data, making them unsuitable for most real-world enterprise use cases.</p></div></div><div class="comparison-col"><h3 class="animate-on-scroll slide-in-right">The Arc Solution</h3><div class="solution-item animate-on-scroll slide-in-right"><h4>Stable, Predictable Fees</h4><p>Using USDC as native gas pegs transaction costs to a stable unit of account, enabling predictable financial planning.</p></div><div class="solution-item animate-on-scroll slide-in-right"><h4>Deterministic Finality</h4><p>Transactions are 100% final and irreversible in under one second, providing the institutional-grade certainty required for finance.</p></div><div class="solution-item animate-on-scroll slide-in-right"><h4>Opt-In, Auditable Privacy</h4><p>Arc shields transaction values from the public while providing "view keys" for compliant auditing, balancing confidentiality with regulatory needs.</p></div></div></div></div><a href="#architecture" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
         <section id="architecture" class="page"><div class="container"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">The Three Pillars of Arc</h2><p class="section-subtitle">Arc's architecture is a purpose-built foundation for modern finance. Click each pillar to explore the detailed technical innovations within.</p></div><div class="accordion animate-on-scroll fade-up"><div class="accordion-item"><div class="accordion-header"><h3>1. Stable Economic Model</h3><span class="accordion-icon">+</span></div><div class="accordion-content"><div class="accordion-content-inner"><p>Arc's economy is designed for predictability and stability, removing barriers to enterprise adoption.</p><ul><li><strong>USDC Native Gas:</strong> Aligns the unit of account for value transfer with the unit for transaction cost, eliminating volatility.</li><li><strong>Predictable Fee Market:</strong> Inspired by EIP-1559, Arc uses a fee smoothing mechanism with a bounded base fee to dampen short-term volatility and keep costs consistently low.</li><li><strong>On-Chain Treasury:</strong> Fees are directed to a network treasury to fund long-term growth and ecosystem development, creating a sustainable model.</li></ul></div></div></div><div class="accordion-item"><div class="accordion-header"><h3>2. High-Performance Consensus</h3><span class="accordion-icon">+</span></div><div class="accordion-content"><div class="accordion-content-inner"><p>Arc provides the institutional-grade settlement assurances required to bring trillions of dollars of financial activity on-chain.</p><ul><li><strong>Malachite BFT Engine:</strong> A high-performance implementation of Tendermint that provides Byzantine Fault Tolerance, enabling high throughput (3,000-10,000+ TPS).</li><li><strong>Deterministic Finality:</strong> Unlike Proof-of-Work, a transaction on Arc is either unconfirmed or 100% final and irreversible in under a second. There is no probabilistic state.</li><li><strong>Permissioned Validator Set:</strong> The network is secured by a known, vetted set of geographically distributed institutions, providing a strong deterrent against malicious behavior and aligning with emerging regulatory frameworks.</li></ul></div></div></div><div class="accordion-item"><div class="accordion-header"><h3>3. Compliant Privacy Framework</h3><span class="accordion-icon">+</span></div><div class="accordion-content"><div class="accordion-content-inner"><p>Arc's phased, modular approach to privacy delivers confidentiality without compromising on institutional compliance.</p><ul><li><strong>Phased Rollout:</strong> Begins with auditable confidential transfers (shielded amounts) and evolves towards fully private state and computation for complex financial logic.</li><li><strong>Modular & Future-Proof:</strong> Leverages Trusted Execution Environments (TEEs) initially for performance, with a "pluggable backend" to integrate future technologies like FHE or ZK-proofs as they mature.</li><li><strong>"View Keys" for Compliance:</strong> The core of the model. Institutions retain control and can grant authorized third parties (like auditors) read-only access to specific transaction data, satisfying regulatory obligations like the Travel Rule.</li></ul></div></div></div></div><a href="#use-cases" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
-        <section id="use-cases" class="page"><div class="container"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">An Ecosystem for Financial Innovation</h2><p class="section-subtitle">Arc is an open invitation for developers and institutions to build the next wave of finance. Hover over each card to discover what's possible.</p></div><div class="flip-grid"><div class="flip-card animate-on-scroll fade-up" style="transition-delay: 0.1s;"><div class="flip-card-inner"><div class="flip-card-front"><h3>Global Payments</h3></div><div class="flip-card-back"><p>Leverage Arc's speed and Circle's CCTP to enable instant, low-cost cross-border payments, remittances, and seamless multi-chain treasury operations for businesses.</p></div></div></div><div class="flip-card animate-on-scroll fade-up" style="transition-delay: 0.2s;"><div class="flip-card-inner"><div class="flip-card-front"><h3>Capital Markets</h3></div><div class="flip-card-back"><p>Issue, trade, and settle regulated Real-World Assets (RWAs) like tokenized credit, equities, and funds. Utilize the native FX engine for 24/7 programmable PvP settlement.</p></div></div></div><div class="flip-card animate-on-scroll fade-up" style="transition-delay: 0.3s;"><div class="flip-card-inner"><div class="flip-card-front"><h3>Enterprise Treasury</h3></div><div class="flip-card-back"><p>Build autonomous, AI-native agents to manage corporate treasuries, execute programmable spending policies, and optimize working capital in real-time with assets like USYC.</p></div></div></div></div><a href="#demo" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
+        <section id="use-cases" class="page"><div class="container"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">An Ecosystem for Financial Innovation</h2><p class="section-subtitle">Arc is an open invitation for developers and institutions to build the next wave of finance. Hover over each card to discover what's possible.</p></div><div class="flip-grid"><div class="flip-card animate-on-scroll fade-up" style="transition-delay: 0.1s;"><div class="flip-card-inner"><div class="flip-card-front"><h3>Global Payments</h3></div><div class="flip-card-back"><p>Leverage Arc's speed and Circle's CCTP to enable instant, low-cost cross-border payments, remittances, and seamless multi-chain treasury operations for businesses.</p></div></div></div><div class="flip-card animate-on-scroll fade-up" style="transition-delay: 0.2s;"><div class="flip-card-inner"><div class="flip-card-front"><h3>Capital Markets</h3></div><div class="flip-card-back"><p>Issue, trade, and settle regulated Real-World Assets (RWAs) like tokenized credit, equities, and funds. Utilize the native FX engine for 24/7 programmable PvP settlement.</p></div></div></div><div class="flip-card animate-on-scroll fade-up" style="transition-delay: 0.3s;"><div class="flip-card-inner"><div class="flip-card-front"><h3>Enterprise Treasury</h3></div><div class="flip-card-back"><p>Build autonomous, AI-native agents to manage corporate treasuries, execute programmable spending policies, and optimize working capital in real-time with assets like USYC.</p></div></div></div></div><a href="#roadmap" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
+        <section id="roadmap" class="page"><div class="container"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">Launch Trajectory</h2><p class="section-subtitle">Arc's phased rollout is designed for a secure and robust launch, with key milestones on the horizon.</p></div><div class="roadmap-container animate-on-scroll fade-up"><div class="roadmap-header">WHEN ARC</div><div class="roadmap-item"><div class="status-indicator blinking"></div><div class="date">Live now</div><div class="milestone">Private Testnet</div></div><div class="roadmap-item"><div class="status-indicator"></div><div class="date">Fall 2025</div><div class="milestone">Public Testnet</div></div><div class="roadmap-item"><div class="status-indicator"></div><div class="date">Following Testnet</div><div class="milestone">Mainnet Beta Launch</div></div><div class="roadmap-item"><div class="status-indicator"></div><div class="date">Post-Launch</div><div class="milestone">Full Privacy & PoS Upgrades</div></div></div><a href="#demo" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
         <section id="demo" class="page"><div class="container"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">See Privacy & Finality in Action</h2><p class="section-subtitle">This automated demo simulates an enterprise treasury payment on Arc. Press play or step through manually to see how speed, certainty, and confidentiality are combined.</p></div><div class="demo-wrapper animate-on-scroll fade-up"><div class="demo-container"><div class="demo-top-bar"><div class="demo-timeline-controls"><button class="demo-control-btn" id="play-pause-btn"><svg id="play-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg><svg id="pause-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg><span>Play</span></button><button class="demo-control-btn" id="reset-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"></path></svg><span>Reset</span></button></div><div class="demo-privacy-controls"><label class="toggle-label"><span>Hide Private Data</span><label class="toggle-switch"><input type="checkbox" id="privacy-toggle"><span class="slider"></span></label><span>Show</span></label></div></div><div class="demo-timeline"><div class="timeline-bar"></div><div class="timeline-progress" id="timeline-progress"></div><div class="timeline-step active" data-step="1"><div class="timeline-dot"></div><div class="timeline-label">Init</div></div><div class="timeline-step" data-step="2"><div class="timeline-dot"></div><div class="timeline-label">Privacy</div></div><div class="timeline-step" data-step="3"><div class="timeline-dot"></div><div class="timeline-label">Finality</div></div><div class="timeline-step" data-step="4"><div class="timeline-dot"></div><div class="timeline-label">Audit</div></div></div></div><div class="demo-container"><div class="demo-content"><div class="demo-step active" id="demo-step-1"><p>An enterprise initiates a <span class="private-data-value">2,500,000 USDC</span> payment to a supplier.</p><div class="demo-box-container"><div class="demo-box public"><h4>Public Ledger View</h4><div class="demo-box-content">Status: <span style="color: var(--accent-secondary)">Pending...</span></div></div><div class="demo-box private"><h4>Sender's Private View</h4><div class="demo-box-content">To: Supplier-Wallet-A5<br>Amount: <span class="private-data-value">2,500,000 USDC</span></div></div></div></div><div class="demo-step" id="demo-step-2"><p>Arc's Opt-In Privacy encrypts the transaction amount before it's written to the ledger.</p><div class="demo-box-container"><div class="demo-box public"><h4>Public Ledger View</h4><div class="demo-box-content">From: 0x123...abc<br>To: 0x456...def<br>Amount: <span class="blur">EncryptedData</span></div></div><div class="demo-box private"><h4>Sender's Private View</h4><div class="demo-box-content">To: Supplier-Wallet-A5<br>Amount: <span class="private-data-value">2,500,000 USDC</span></div></div></div></div><div class="demo-step" id="demo-step-3"><p>The transaction achieves deterministic finality in <1 second. It is now 100% irreversible.</p><div class="demo-box-container"><div class="demo-box public"><h4>Public Ledger View</h4><div class="demo-box-content">Status: <span style="color: var(--accent-success);">Final & Settled</span><br>Finality: Deterministic</div></div><div class="demo-box private"><h4>Recipient's Private View</h4><div class="demo-box-content">From: Corp-Treasury-01<br>Amount: <span class="private-data-value">+2,500,000 USDC</span></div></div></div></div><div class="demo-step" id="demo-step-4"><p>Months later, an auditor uses a "view key" to compliantly inspect the shielded transaction details.</p><div class="demo-box-container"><div class="demo-box public"><h4>Public Ledger View</h4><div class="demo-box-content">Amount: <span class="blur">EncryptedData</span></div></div><div class="demo-box auditor"><h4>Auditor's View (via Key)</h4><div class="demo-box-content">From: 0x123...abc<br>Amount: <span class="private-data-value">2,500,000 USDC</span></div></div></div></div></div></div></div><a href="#quiz" class="scroll-down-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>
         <section id="quiz" class="page"><div class="container" style="display: flex; flex-direction: column; align-items: center;"><div class="section-header animate-on-scroll fade-up"><h2 class="section-title">Test Your Knowledge</h2><p class="section-subtitle">You've explored the details. Solidify your understanding with a final quiz on Arc's core technology and purpose.</p></div><div class="quiz-container animate-on-scroll fade-up" id="quiz-box"></div></div></section>
     </main>
     <div id="quiz-result-card"></div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // --- NAVIGATION AND SMOOTH SCROLL ---
-    const smoothScrollToAction = function(e) { e.preventDefault(); document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); };
-    document.getElementById('start-learning-btn').addEventListener('click', smoothScrollToAction);
-    document.querySelectorAll('.scroll-down-arrow').forEach(arrow => arrow.addEventListener('click', smoothScrollToAction));
-    document.querySelectorAll('.journey-item').forEach(item => item.addEventListener('click', smoothScrollToAction));
-    
-    const sections = document.querySelectorAll('.page');
-    const journeyItems = document.querySelectorAll('.journey-item');
-    const scrollArrows = document.querySelectorAll('.scroll-down-arrow');
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    
-    // --- UNIFIED SCROLL OBSERVER ---
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            const sectionId = entry.target.id;
-            
-            // Handle content animations
-            if (entry.isIntersecting && entry.target.classList.contains('animate-on-scroll')) {
-                entry.target.classList.add('visible');
-            }
-
-            // Handle nav, journey, and arrow visibility based on which section is most visible
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                journeyItems.forEach(item => item.classList.toggle('active', item.dataset.section === sectionId));
-                scrollArrows.forEach(arrow => {
-                    const arrowSection = arrow.closest('.page').id;
-                    arrow.classList.toggle('visible', arrowSection === sectionId);
-                });
-            }
-        });
-    }, { threshold: [0.1, 0.5, 0.9] });
-
-    sections.forEach(section => scrollObserver.observe(section));
-    animatedElements.forEach(el => scrollObserver.observe(el));
-    
-    // --- INTRO HIGHLIGHTS ANIMATION ---
-    const highlightObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && entry.target.dataset.target) {
-                const el = entry.target;
-                const target = +el.dataset.target; el.textContent = '0+'; let current = 0;
-                const increment = Math.max(target / 100, 1);
-                const interval = setInterval(() => {
-                    current += increment;
-                    if (current >= target) { el.textContent = el.textContent.replace(/[\d,]+/, target.toLocaleString()); clearInterval(interval); } 
-                    else { el.textContent = el.textContent.replace(/[\d,]+/, Math.ceil(current).toLocaleString()); }
-                }, 20);
-                highlightObserver.unobserve(el); 
-            }
-        });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('.highlight-value').forEach(card => highlightObserver.observe(card));
-
-    // --- PROBLEM TABS ---
-    const tabContainer = document.querySelector('.problem-tabs');
-    tabContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('tab-btn')) {
-            tabContainer.querySelector('.active').classList.remove('active');
-            e.target.classList.add('active');
-            document.querySelectorAll('.problem-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(e.target.dataset.target).classList.add('active');
-            document.querySelectorAll(`#${e.target.dataset.target} .animate-on-scroll`).forEach(el => { el.classList.remove('visible'); scrollObserver.observe(el); });
-        }
-    });
-
-    // --- ARCHITECTURE ACCORDION ---
-    document.querySelectorAll('.accordion-item .accordion-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const item = header.parentElement;
-            const content = item.querySelector('.accordion-content');
-            const isActive = item.classList.contains('active');
-            document.querySelectorAll('.accordion-item').forEach(i => { i.classList.remove('active'); i.querySelector('.accordion-content').style.maxHeight = null; });
-            if (!isActive) { item.classList.add('active'); content.style.maxHeight = content.scrollHeight + 'px'; }
-        });
-    });
-
-    // --- DEMO SCRIPT & QUIZ SCRIPT (Identical to previous correct version) ---
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    if (playPauseBtn) {
-        const resetBtn = document.getElementById('reset-btn'), privacyToggle = document.getElementById('privacy-toggle'), playIcon = document.getElementById('play-icon'), pauseIcon = document.getElementById('pause-icon'), playPauseText = playPauseBtn.querySelector('span'), timelineSteps = document.querySelectorAll('.timeline-step');
-        let currentDemoStep = 1, totalDemoSteps = 4, isDemoPlaying = false, demoInterval;
-        const goToStep = (stepNumber) => { currentDemoStep = stepNumber; document.querySelectorAll('.demo-step').forEach(s => s.classList.remove('active')); document.getElementById(`demo-step-${currentDemoStep}`).classList.add('active'); timelineSteps.forEach(ts => ts.classList.toggle('active', parseInt(ts.dataset.step) <= currentDemoStep)); document.getElementById('timeline-progress').style.width = `${((currentDemoStep - 1) / (totalDemoSteps - 1)) * 100}%`; if (currentDemoStep === totalDemoSteps) pauseDemo(); };
-        const advanceStep = () => currentDemoStep < totalDemoSteps ? goToStep(currentDemoStep + 1) : pauseDemo();
-        const pauseDemo = () => { isDemoPlaying = false; playPauseText.textContent = 'Play'; playIcon.style.display = 'inline-block'; pauseIcon.style.display = 'none'; clearInterval(demoInterval); };
-        const resetDemo = () => { pauseDemo(); goToStep(1); };
-        const playDemo = () => { if (currentDemoStep === totalDemoSteps) resetDemo(); isDemoPlaying = true; playPauseText.textContent = 'Pause'; playIcon.style.display = 'none'; pauseIcon.style.display = 'inline-block'; demoInterval = setInterval(advanceStep, 3000); };
-        playPauseBtn.addEventListener('click', () => isDemoPlaying ? pauseDemo() : playDemo());
-        resetBtn.addEventListener('click', resetDemo);
-        timelineSteps.forEach(ts => ts.addEventListener('click', () => { pauseDemo(); goToStep(parseInt(ts.dataset.step)); }));
-        privacyToggle.addEventListener('change', () => document.querySelectorAll('.private-data-value').forEach(el => el.classList.toggle('blur', !privacyToggle.checked)));
-        document.querySelectorAll('.private-data-value').forEach(el => el.classList.add('blur'));
-    }
-    const quizBox = document.getElementById('quiz-box');
-    if (quizBox) {
-        const quizData = [ 
-            { question: "What is the primary benefit of using USDC as the native gas token on Arc?", options: ["It makes transactions faster.", "It provides predictable, stable operational costs.", "It increases network decentralization.", "It's required for smart contract execution."], answer: "It provides predictable, stable operational costs.", explanation: "By using a stablecoin like USDC for gas, Arc eliminates the price volatility of typical gas tokens (like ETH), making financial planning and accounting much simpler for enterprises." }, { question: "What does 'Deterministic Settlement Finality' mean on Arc?", options: ["Transactions might be reversed if a better block is found.", "Transactions are confirmed after about 15 minutes.", "Transactions are 100% final and irreversible in under a second.", "Finality depends on the economic value of the transaction."], answer: "Transactions are 100% final and irreversible in under a second.", explanation: "Unlike probabilistic finality (like on Bitcoin or Ethereum), Arc's BFT consensus ensures that once a transaction is included in a block, it cannot be reverted. This certainty is crucial for high-value finance." }, { question: "How does Arc's 'Opt-In Privacy' support institutional compliance?", options: ["It makes all transaction data completely anonymous and untraceable.", "It allows institutions to grant selective, read-only access to auditors via 'view keys'.", "It automatically reports all transactions to regulatory bodies.", "It hides the sender and receiver addresses from the public."], answer: "It allows institutions to grant selective, read-only access to auditors via 'view keys'.", explanation: "Arc balances privacy with compliance. While transaction amounts are shielded from the public, 'view keys' create a compliant audit trail for authorized parties without exposing sensitive data publicly." }, { question: "What is the consensus engine used by Arc?", options: ["Proof-of-Work (PoW)", "Proof-of-Stake (PoS)", "Malachite (a Tendermint BFT implementation)", "Proof-of-Authority (PoA)"], answer: "Malachite (a Tendermint BFT implementation)", explanation: "Arc is built on Malachite, a high-performance implementation of the Tendermint BFT protocol, which enables its high throughput and fast, deterministic finality." }, { question: "Which of the following is NOT a core feature of Arc?", options: ["Support for tokenized Real-World Assets (RWAs).", "An institutional-grade Foreign Exchange (FX) engine.", "Complete anonymity for all users and transactions.", "Cross-chain liquidity hub via Circle's CCTP."], answer: "Complete anonymity for all users and transactions.", explanation: "Arc provides *confidentiality* for transaction values with *compliant auditability*, not complete anonymity. This distinction is vital for its focus on regulated financial services." }
-        ];
-        let currentQuestionIndex = 0, score = 0;
-        const loadQuiz = () => {
-            if (currentQuestionIndex < quizData.length) {
-                const q = quizData[currentQuestionIndex];
-                quizBox.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><span>Question ${currentQuestionIndex + 1}/${quizData.length}</span><span>Score: ${score}/${quizData.length}</span></div>
-                    <div class="quiz-question">${q.question}</div><div class="quiz-options">${q.options.map(o => `<div class="quiz-option">${o}</div>`).join('')}</div>
-                    <div class="quiz-feedback"></div><div class="quiz-controls"><button class="btn btn-primary" id="next-btn" style="display: none;">Next</button></div>`;
-                quizBox.querySelectorAll('.quiz-option').forEach(o => o.addEventListener('click', () => selectAnswer(o)));
-            } else { showResults(); }
-        };
-        const selectAnswer = (selectedOption) => {
-            const options = quizBox.querySelectorAll('.quiz-option'), answer = quizData[currentQuestionIndex].answer, feedbackBox = quizBox.querySelector('.quiz-feedback');
-            options.forEach(o => o.style.pointerEvents = 'none');
-            if (selectedOption.textContent === answer) { score++; selectedOption.classList.add('correct'); feedbackBox.innerHTML = `<strong>Correct!</strong> ${quizData[currentQuestionIndex].explanation}`; feedbackBox.classList.add('correct'); } else { selectedOption.classList.add('incorrect'); options.forEach(opt => { if (opt.textContent === answer) opt.classList.add('correct'); }); feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${quizData[currentQuestionIndex].explanation}`; feedbackBox.classList.add('incorrect'); }
-            feedbackBox.style.display = 'block';
-            const nextBtn = quizBox.querySelector('#next-btn'); nextBtn.style.display = 'inline-block'; nextBtn.addEventListener('click', () => { currentQuestionIndex++; loadQuiz(); });
-        };
-        const showResults = () => {
-            let message = score === quizData.length ? "Excellent! You have a perfect understanding of Arc." : (score >= 3 ? "Great job! You have a solid grasp of how Arc works." : "Good start! Feel free to review the sections and try again.");
-            const resultCard = document.getElementById('quiz-result-card');
-            resultCard.innerHTML = `<div style="text-align: center;"><h2 style="font-size: 2.2rem; font-weight: 700; margin: 0; color: var(--text-primary);">Arc Knowledge Quiz</h2><p style="font-size: 1.2rem; color: var(--text-secondary); margin-top: 10px;">I scored</p><div style="font-size: 5rem; font-weight: 700; margin: 20px 0; background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${score} / ${quizData.length}</div><p style="font-size: 1.1rem; color: var(--text-secondary);">Test your knowledge at garc.fun</p><p style="margin-top: 30px; font-size: 1.5rem; font-weight: 600; color: var(--accent-primary);">Arc<span>.</span>Explained</p></div>`;
-            quizBox.innerHTML = `
-                <div class="quiz-result"><div class="trophy">🏆</div><h2>Quiz Complete!</h2><p>Your Score: ${score}/${quizData.length}</p><p>${message}</p>
-                <button class="btn btn-primary" id="retry-btn">Take Quiz Again</button>
-                <div class="share-container"><h3>Share Your Result!</h3><div class="share-preview" id="share-preview-container"><p>Generating your shareable image...</p></div>
-                <div class="share-buttons"><a href="#" class="btn btn-download" id="download-btn" style="display:none;">Download Image</a><a href="#" class="btn btn-twitter" id="twitter-share-btn" target="_blank">Share on X</a></div>
-                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 15px;">We recommend downloading the image to attach to your tweet!</p></div></div>`;
-            
-            html2canvas(resultCard, { backgroundColor: null }).then(canvas => {
-                const imageUrl = canvas.toDataURL('image/png');
-                document.getElementById('share-preview-container').innerHTML = `<img src="${imageUrl}" alt="Quiz Result Score ${score} out of ${quizData.length}">`;
-                const downloadBtn = document.getElementById('download-btn');
-                downloadBtn.href = imageUrl; downloadBtn.download = `arc_quiz_result_${score}_of_${quizData.length}.png`; downloadBtn.style.display = 'inline-block';
-                const tweetText = encodeURIComponent(`I just scored ${score}/${quizData.length} on the Arc Explained quiz! Learning how @arc_fun is building the future of stablecoin finance with instant finality & compliant privacy. Test your knowledge:`);
-                document.getElementById('twitter-share-btn').href = `https://twitter.com/intent/tweet?text=${tweetText}&url=https://garc.fun`;
-            });
-            document.getElementById('retry-btn').addEventListener('click', () => { currentQuestionIndex = 0; score = 0; loadQuiz(); });
-        };
-        loadQuiz();
-    }
-});
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
